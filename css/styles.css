@@ -1,0 +1,32 @@
+/* Custom Styles for Dinos Party */
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.pattern-bg {
+    background-color: #fff5ec;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2s-.9 2-2 2h-2c-1.1 0-2-.9-2-2zM10 10c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2s-.9 2-2 2h-2c-1.1 0-2-.9-2-2z' fill='%2329664c' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+body {
+    min-height: max(884px, 100dvh);
+}
+
+/* Swiper Customization */
+.moments-swiper {
+    --swiper-theme-color: #29664c;
+    --swiper-navigation-size: 20px;
+}
+
+.swiper-pagination-bullet {
+    background: #29664c !important;
+    opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    width: 20px !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease;
+}

@@ -1,143 +1,73 @@
 <!DOCTYPE html>
-
 <html class="scroll-smooth" lang="pt-br">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>O 1º Rugido do Théo - Convite de Aniversário</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Você está convidado para o 1º Rugido do Théo! Uma aventura jurássica para comemorar o primeiro aninho.">
+    <meta name="keywords" content="aniversário, théo, dinossauros, convite, festa infantil">
+    <meta property="og:title" content="O 1º Rugido do Théo">
+    <meta property="og:description" content="Junte-se a nós nesta aventura jurássica!">
+    <meta property="og:type" content="website">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap"
         rel="stylesheet" />
+
     <!-- Material Symbols -->
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "inverse-primary": "#beffdc",
-                        "surface-variant": "#f2d9bc",
-                        "on-tertiary-fixed": "#003d50",
-                        "on-surface-variant": "#685948",
-                        "on-primary-container": "#246147",
-                        "inverse-on-surface": "#ac9a86",
-                        "on-error-container": "#570008",
-                        "secondary-fixed": "#ffca3d",
-                        "on-secondary-container": "#5b4400",
-                        "on-surface": "#382d1e",
-                        "inverse-surface": "#150c03",
-                        "tertiary-container": "#a3e0fc",
-                        "on-secondary-fixed-variant": "#664d00",
-                        "on-secondary-fixed": "#433200",
-                        "tertiary-fixed-dim": "#95d2ee",
-                        "surface-container-low": "#ffeedd",
-                        "primary-dim": "#1b5a40",
-                        "surface-container-lowest": "#ffffff",
-                        "on-background": "#382d1e",
-                        "secondary-container": "#ffca3d",
-                        "on-primary-fixed": "#0a4f36",
-                        "on-error": "#ffefee",
-                        "outline-variant": "#bdaa95",
-                        "background": "#fff5ec",
-                        "surface-dim": "#ead0b2",
-                        "error-container": "#fb5151",
-                        "error": "#b31b25",
-                        "secondary-dim": "#654c00",
-                        "tertiary": "#20627b",
-                        "tertiary-fixed": "#a3e0fc",
-                        "surface": "#fff5ec",
-                        "primary-fixed": "#b9f9d6",
-                        "surface-container": "#fce4ca",
-                        "surface-container-highest": "#f2d9bc",
-                        "secondary-fixed-dim": "#f0bd2c",
-                        "on-tertiary-container": "#005169",
-                        "error-dim": "#9f0519",
-                        "outline": "#847462",
-                        "primary-container": "#b9f9d6",
-                        "on-tertiary": "#e4f5ff",
-                        "on-primary": "#c8ffe0",
-                        "primary-fixed-dim": "#abebc8",
-                        "secondary": "#735700",
-                        "tertiary-dim": "#0b566e",
-                        "surface-bright": "#fff5ec",
-                        "on-secondary": "#fff1d9",
-                        "primary": "#29664c",
-                        "on-tertiary-fixed-variant": "#145b73",
-                        "on-primary-fixed-variant": "#2f6c51",
-                        "surface-container-high": "#f7dfc3",
-                        "surface-tint": "#29664c"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Plus Jakarta Sans"],
-                        "body": ["Be Vietnam Pro"],
-                        "label": ["Be Vietnam Pro"]
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
 
-        .pattern-bg {
-            background-color: #fff5ec;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2s-.9 2-2 2h-2c-1.1 0-2-.9-2-2zM10 10c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2s-.9 2-2 2h-2c-1.1 0-2-.9-2-2z' fill='%2329664c' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-    </style>
-    <style>
-        body {
-            min-height: max(884px, 100dvh);
-        }
-    </style>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Project Assets -->
+    <script src="js/config.js"></script>
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
 
-<body class="bg-background text-on-surface font-body selection:bg-primary-container overflow-x-hidden">
-    <!-- TopAppBar -->
-    <nav
-        class="fixed top-0 w-full z-50 bg-[#fff5ec]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0px_24px_24px_rgba(56,45,30,0.04)] flex justify-between items-center px-6 py-4">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-[#29664c] dark:text-[#b9f9d6]"
-                data-icon="bakery_dining">bakery_dining</span>
-            <h1 class="text-xl font-bold text-[#29664c] dark:text-[#b9f9d6] tracking-[-2%] font-headline">O 1º Rugido do
-                Théo</h1>
-        </div>
-        <button
-            class="text-[#735700] font-medium hover:opacity-80 transition-opacity scale-95 active:scale-90 transition-transform duration-200">
-            <span class="material-symbols-outlined" data-icon="menu">menu</span>
-        </button>
-    </nav>
-    <main class="pt-20 pb-24 pattern-bg">
+<body class="bg-stone-100 dark:bg-stone-950 text-on-surface font-body selection:bg-primary-container overflow-x-hidden flex justify-center">
+    <!-- Main Shell Container -->
+    <div class="w-full max-w-[500px] bg-background min-h-screen shadow-[0_0_100px_rgba(41,102,76,0.1)] relative">
+        
+        <!-- TopAppBar -->
+        <nav class="fixed top-0 w-full max-w-[500px] z-50 bg-[#fff5ec]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0px_24px_24px_rgba(56,45,30,0.04)] flex justify-center items-center px-6 py-4"
+            aria-label="Navegação principal">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🦖</span>
+                <h1 class="text-xl font-bold text-[#29664c] dark:text-[#b9f9d6] tracking-[-2%] font-headline">O 1º Rugido do Théo</h1>
+            </div>
+        </nav>
+
+    <main class="pt-20 pb-12 pattern-bg">
         <!-- Hero Section -->
         <section class="px-6 py-12 flex flex-col items-center text-center relative overflow-hidden">
             <!-- Decorative Leaf Backgrounds -->
             <div class="absolute -left-10 top-20 opacity-20 rotate-12">
-                <span class="material-symbols-outlined text-9xl text-primary" data-icon="eco">eco</span>
+                <span class="material-symbols-outlined text-9xl text-primary" data-icon="eco"
+                    aria-hidden="true">eco</span>
             </div>
             <div class="absolute -right-10 bottom-10 opacity-20 -rotate-45">
-                <span class="material-symbols-outlined text-9xl text-primary" data-icon="eco">eco</span>
+                <span class="material-symbols-outlined text-9xl text-primary" data-icon="eco"
+                    aria-hidden="true">eco</span>
             </div>
+
             <div class="relative mb-8">
-                <div
-                    class="w-64 h-64 rounded-full bg-secondary-container flex items-center justify-center shadow-lg overflow-hidden border-8 border-surface">
-                    <img alt="Dinossauro Fofo" class="w-full h-full object-cover"
-                        data-alt="cute watercolor illustrated green brontosaurus wearing a party hat standing in a prehistoric jungle setting with soft pastel colors"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDioBIHzr1tGIiHNoqQvP0ldb5euRIiW-FANrnuGnCHbiffSZpIGlCJTjVLvPY1nCYdSiG9HrSUYHak21fAvkn8NGx6VF60x_bmWahtWX3peZdKEhXWfVtOPDmeLWmuquEjv_UY_sSxFNoG2nERcX8JKDj9RElN7J39rQ6QbMehgk4slV7j7uj6qtrSvUQBOTP0WlUnOWV8Aj2nSQt_nNS83_VjfnGz42GAnbHhNIaze6vEHZ0L8vNhIEVpd_3ceC1hT6-QAxvmQLU" />
+                <div class="w-64 h-64 rounded-full flex items-center justify-center shadow-lg overflow-hidden border-8 border-surface"
+                    style="background-color: #76C24D;">
+                    <img alt="Um dinossauro braquiossauro verde fofo usando um chapéu de festa em uma selva pré-histórica"
+                        class="w-full h-full object-contain" src="assets/img/avatar.png" />
                 </div>
                 <!-- Age Badge -->
                 <div
@@ -148,78 +78,79 @@
                         class="text-[10px] font-bold uppercase tracking-tighter text-on-secondary-container">Ano</span>
                 </div>
             </div>
+
             <h2 class="text-4xl font-extrabold font-headline text-on-background tracking-tight mb-4">O Théo vai fazer 1!
             </h2>
             <p class="text-on-surface-variant text-lg max-w-xs mb-8">Junte-se a nós para uma celebração radical da
                 primeira volta do Théo ao redor do sol.</p>
+
             <button
                 class="flex items-center gap-3 bg-primary text-on-primary px-8 py-4 rounded-xl shadow-lg hover:opacity-90 active:scale-95 transition-all">
                 <span class="material-symbols-outlined" data-icon="play_circle"
-                    style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                    style="font-variation-settings: 'FILL' 1;" aria-hidden="true">play_circle</span>
                 <span class="font-bold tracking-wide uppercase text-sm">Ouvir Música</span>
             </button>
         </section>
+
         <!-- Our Moments (Bento Gallery) -->
         <section class="px-6 py-12 bg-surface-container-low rounded-t-xl">
             <div class="flex items-center gap-3 mb-8">
-                <span class="material-symbols-outlined text-primary" data-icon="auto_stories">auto_stories</span>
+                <span class="material-symbols-outlined text-primary" data-icon="auto_stories"
+                    aria-hidden="true">auto_stories</span>
                 <h3 class="text-2xl font-bold font-headline">Nossos Momentos</h3>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <!-- Large Video/Photo Frame -->
-                <div
-                    class="col-span-2 bg-surface-container-highest rounded-lg p-3 shadow-sm relative overflow-hidden aspect-video group">
-                    <img alt="Vídeo do Théo" class="w-full h-full object-cover rounded-md"
-                        data-alt="candid lifestyle shot of a baby boy laughing while sitting in a nest of lush green leaves, warm natural outdoor lighting"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJsrRf0jojLsKhyxBe7lEOl9O6AUyatYfJD1A7CLT2XGe7zCR9tRibBga8WmjYACr7TodH0yY2ZS_pxBLSmcM1oDcvWt--g1IWE-2GL0Bbo02fOWHBeLEN_h6Tr1StC3h_0G2tUQTzPyO6Hl4zJanQHwgTmGHuGbv8kbH16DYjt1y7S_2yXv6AoM8KVe6TBJnKyL544QnYmPDpRN1TmVbfMpJf0c43eOmodSXSPBw1WP4Dgahcss_aCPdZQyoCe199H79oPmRtgGc" />
-                    <div
-                        class="absolute inset-0 flex items-center justify-center bg-on-background/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined text-5xl text-white" data-icon="play_arrow"
-                            style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-                    </div>
+
+            <div class="swiper moments-swiper rounded-xl overflow-hidden shadow-2xl">
+                <div class="swiper-wrapper" id="moments-wrapper">
+                    <!-- Gerado dinamicamente via main.js -->
                 </div>
-                <!-- Small Polaroids -->
-                <div class="bg-white p-2 pb-8 shadow-md rotate-[-2deg] rounded-sm flex flex-col items-center">
-                    <div class="w-full aspect-square bg-surface-container overflow-hidden rounded-sm mb-2">
-                        <img alt="Momento do Théo" class="w-full h-full object-cover"
-                            data-alt="close-up of a baby's hands holding a wooden toy dinosaur, soft focus, creamy aesthetic"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVWyitCiSYSSyrNrML-PJCTqeDmylD574-NjZdI5o-UIrAMq4TvgHNpt6y2Iq5ddtIlBoCJBFmydjSo5FLhsp-hejq77JOh7Sjsg_4Jv9EKmlhYvqQin_P6ZCnNnAOfvtrF106C714hyVQzNdtyUmTY_4kLn2Fn6BERjv2gvrM1JBv-8ATwQrIoVjFCMRsAbJgqvOt9EFRwZYlJ2_qqFSOnQKd7RiwBJBuvzgGiJ3tFzB6r2LswjmfGM2NMlZZbdo6VJ7RAUVcL-Q" />
-                    </div>
-                    <span class="text-[10px] font-headline text-on-surface-variant italic">Primeiros Passos</span>
+                <!-- Pagination & Navigation -->
+                <div class="swiper-pagination"></div>
+                <div
+                    class="swiper-button-next !text-white !w-12 !h-12 bg-black/30 backdrop-blur-md rounded-full after:hidden flex items-center justify-center hover:bg-black/50 transition-colors">
+                    <span class="material-symbols-outlined !text-3xl">chevron_right</span>
                 </div>
                 <div
-                    class="bg-white p-2 pb-8 shadow-md rotate-[3deg] rounded-sm flex flex-col items-center translate-y-4">
-                    <div class="w-full aspect-square bg-surface-container overflow-hidden rounded-sm mb-2">
-                        <img alt="Momento do Théo" class="w-full h-full object-cover"
-                            data-alt="baby boy wearing a dinosaur onesie sleeping peacefully on a soft earthy-toned blanket"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzbJSvpAgLU0FaGJ2lhJjCV2gdtkFDspNTfFFTZX7gkj8IF2iaMC8P3OnBD0-Rn41QKRCCTXyk4w6yAOVZY2cp1Gxfpat_1NBoF53D10S4pG_QM5qQzwtY4QzFlLBDaLrKBNG5UerYYgC4mzvFDf-IUKWYsuO5ngR8vsArMuZ3NVXmreGNEVCOODVAG8qvaTB0tW6vXuKamXWyjr6CnfWCIMCkT6h92locgYKyp-gMojY2uPysenrJfBZK2A8hDNRnlm7VGhJLpDw" />
-                    </div>
-                    <span class="text-[10px] font-headline text-on-surface-variant italic">Hora do Sono</span>
+                    class="swiper-button-prev !text-white !w-12 !h-12 bg-black/30 backdrop-blur-md rounded-full after:hidden flex items-center justify-center hover:bg-black/50 transition-colors">
+                    <span class="material-symbols-outlined !text-3xl">chevron_left</span>
                 </div>
             </div>
         </section>
+
         <!-- Party Details -->
         <section class="px-6 py-16 space-y-8">
             <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary" data-icon="celebration">celebration</span>
+                <span class="material-symbols-outlined text-secondary" data-icon="celebration"
+                    aria-hidden="true">celebration</span>
                 <h3 class="text-2xl font-bold font-headline">Detalhes da Festa</h3>
             </div>
+
             <div class="grid grid-cols-1 gap-6">
                 <!-- Date/Time Card -->
                 <div
-                    class="flex items-center gap-6 p-6 bg-surface-container-highest rounded-lg rounded-tr-xl shadow-sm border-l-8 border-secondary">
-                    <div
-                        class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container">
-                        <span class="material-symbols-outlined text-3xl" data-icon="calendar_month"
-                            style="font-variation-settings: 'FILL' 1;">calendar_month</span>
-                    </div>
-                    <div>
-                        <p class="text-label-md font-bold uppercase tracking-widest text-secondary opacity-70">Data e
-                            Hora</p>
-                        <p class="text-xl font-bold text-on-background">Sábado, 14 de Out</p>
-                        <p class="text-on-surface-variant">16:00 - 19:00</p>
+                    class="p-6 bg-surface-container-highest rounded-lg rounded-tr-xl shadow-sm border-l-8 border-secondary">
+                    <div class="flex flex-col w-full gap-4">
+                        <div class="flex items-center gap-6">
+                            <div
+                                class="w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container">
+                                <span class="material-symbols-outlined text-3xl" data-icon="calendar_month"
+                                    style="font-variation-settings: 'FILL' 1;" aria-hidden="true">calendar_month</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold uppercase tracking-widest text-secondary opacity-70">Data e Hora</p>
+                                <p class="text-xl font-bold text-on-background">Sábado, 12 de Set</p>
+                                <p class="text-on-surface-variant">16:00h às 20:00h</p>
+                            </div>
+                        </div>
+                        <a href="https://calendar.google.com/calendar/u/0/r/eventedit?text=1º+Rugido+do+Théo+🦖&dates=20260912T190000Z/20260912T230000Z&details=Convite+para+comemorar+o+primeiro+aninho+do+Théo!&location=Cerimonial+Mariani+-+R.+Frederico+Ozanan,+891+-+Santa+Tereza,+Vitória+-+ES&sf=true&output=xml"
+                            target="_blank"
+                            class="flex items-center justify-center gap-2 w-full bg-secondary/10 text-secondary py-3 rounded-lg font-bold hover:bg-secondary/20 transition-all border-2 border-secondary/20 text-sm">
+                            <span class="material-symbols-outlined text-xl">event_upcoming</span>
+                            SALVAR NO CALENDÁRIO
+                        </a>
                     </div>
                 </div>
+
                 <!-- Location Card -->
                 <div
                     class="p-6 bg-surface-container-highest rounded-lg rounded-tr-xl shadow-sm border-l-8 border-primary">
@@ -227,115 +158,144 @@
                         <div
                             class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container">
                             <span class="material-symbols-outlined text-3xl" data-icon="location_on"
-                                style="font-variation-settings: 'FILL' 1;">location_on</span>
+                                style="font-variation-settings: 'FILL' 1;" aria-hidden="true">location_on</span>
                         </div>
                         <div>
-                            <p class="text-label-md font-bold uppercase tracking-widest text-primary opacity-70">Local
-                            </p>
-                            <p class="text-xl font-bold text-on-background">Parque de Aventuras Dino</p>
-                            <p class="text-on-surface-variant">Alameda da Selva, Green Valley</p>
+                            <p class="text-sm font-bold uppercase tracking-widest text-primary opacity-70">Local</p>
+                            <p class="text-xl font-bold text-on-background">Cerimonial Mariani</p>
+                            <p class="text-on-surface-variant">R. Frederico Ozanan, 891 - Santa Tereza, Vitória</p>
                         </div>
                     </div>
-                    <div class="w-full h-40 bg-surface rounded-lg overflow-hidden border border-outline-variant/15">
-                        <img alt="Localização no Mapa" class="w-full h-full object-cover"
-                            data-alt="simple minimal map view showing a green park area with a dinosaur icon pin"
-                            data-location="Green Valley"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1LOjYuGfB9GPnNm5aXsBV3QpmVqbOtF2pOH5v7CKvK-fX9aYAFfmy5Kqr_vUpAIeUjiXYeOHyMYWkrQHGz62T9Ey3XhkhPV6f4366Fd5eWjDnIPhgUtMrfckpe8WsTtV7j0Bq8Eej7znGAIcOFU-50lzLpn5NxQEtHUXL7ugRuaqhZzRUaWFTdo0gA1BWlhWR-AbtqfJZvRS11JYfN3RLl51ni6JSbE1E6md3e--a49ayq3bXZBV32_Tvc2-xOL6Mj_NmrYBtosA" />
+                    <div class="w-full h-56 bg-surface rounded-lg overflow-hidden border border-outline-variant/15">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3741.819634185041!2d-40.34968990000001!3d-20.307731499999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xb83daab49a1d21%3A0x3435269cc445f729!2sCerimonial%20Mariani!5e0!3m2!1spt-BR!2sbr!4v1775759884013!5m2!1spt-BR!2sbr"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
+                    <a href="https://maps.app.goo.gl/xkt59dufN4AoHZWJ8" target="_blank"
+                        class="mt-4 flex items-center justify-center gap-2 w-full bg-primary/10 text-primary py-4 rounded-xl font-bold hover:bg-primary/20 transition-all border-2 border-primary/20">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">directions</span>
+                        ABRIR NO GPS / MAPS
+                    </a>
                 </div>
             </div>
         </section>
+
         <!-- RSVP Form -->
         <section
             class="mx-6 p-8 bg-surface-container-highest rounded-lg rounded-tr-xl shadow-lg relative overflow-hidden">
             <div class="absolute -right-4 -top-4 opacity-10">
-                <span class="material-symbols-outlined text-8xl text-on-surface" data-icon="footprint">footprint</span>
+                <span class="material-symbols-outlined text-8xl text-on-surface" data-icon="footprint"
+                    aria-hidden="true">footprint</span>
             </div>
+
             <div class="flex flex-col items-center text-center mb-8">
                 <h3 class="text-2xl font-bold font-headline text-on-background">Confirmar Presença</h3>
                 <p class="text-on-surface-variant">Ajude-nos a preparar o banquete dino!</p>
             </div>
+
             <form class="space-y-6">
                 <div>
-                    <label class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Nome</label>
-                    <input
+                    <label for="name" class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Nome</label>
+                    <input id="name"
                         class="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-2 focus:ring-primary-container transition-all text-on-surface"
-                        placeholder="Seu nome" type="text" />
+                        placeholder="Seu nome" type="text" required />
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Quantas pessoas?</label>
-                    <select
+                    <label for="guests" class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Quantas
+                        pessoas?</label>
+                    <select id="guests"
                         class="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-2 focus:ring-primary-container transition-all text-on-surface appearance-none">
-                        <option>1 Pessoa</option>
-                        <option>2 Pessoas</option>
-                        <option>3 Pessoas</option>
-                        <option>4+ Pessoas</option>
+                        <option value="1">1 Pessoa</option>
+                        <option value="2">2 Pessoas</option>
+                        <option value="3">3 Pessoas</option>
+                        <option value="4+">4+ Pessoas</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Observação</label>
-                    <textarea
+                    <label for="obs"
+                        class="block text-sm font-bold text-on-surface-variant mb-2 ml-1">Observação</label>
+                    <textarea id="obs"
                         class="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-2 focus:ring-primary-container transition-all text-on-surface"
                         placeholder="Restrições alimentares ou notas especiais" rows="3"></textarea>
                 </div>
                 <button
                     class="w-full py-5 bg-primary text-on-primary rounded-full font-bold text-lg shadow-md active:scale-95 transition-transform"
-                    type="button">
+                    type="submit">
                     Confirmar Presença
                 </button>
             </form>
         </section>
+
         <!-- Gifts Section -->
         <section class="px-6 py-16">
             <div class="flex items-center justify-center gap-3 mb-8">
                 <div class="h-px bg-outline-variant flex-grow opacity-30"></div>
                 <div class="flex items-center gap-2 px-4">
-                    <span class="material-symbols-outlined text-secondary"
-                        data-icon="featured_seasonal_and_gifts">featured_seasonal_and_gifts</span>
+                    <span class="material-symbols-outlined text-secondary" data-icon="featured_seasonal_and_gifts"
+                        aria-hidden="true">featured_seasonal_and_gifts</span>
                     <h3 class="text-xl font-bold font-headline whitespace-nowrap">Sugestões de Presentes</h3>
                 </div>
                 <div class="h-px bg-outline-variant flex-grow opacity-30"></div>
             </div>
-            <div class="grid grid-cols-3 gap-4">
-                <div
-                    class="flex flex-col items-center gap-2 p-4 bg-surface-container rounded-lg group active:scale-95 transition-transform">
-                    <div
-                        class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shadow-sm">
-                        <span class="material-symbols-outlined" data-icon="toy_brick">brick</span>
+
+            <div class="space-y-6">
+                <!-- Sugestões Rápidas -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col items-center gap-2 p-4 bg-surface-container rounded-lg">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shadow-sm">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">extension</span>
+                        </div>
+                        <span class="text-[10px] font-extrabold text-on-surface-variant uppercase text-center leading-tight">Brinquedos<br>educativos</span>
                     </div>
-                    <span class="text-[10px] font-bold text-on-surface-variant uppercase text-center">Brinquedos</span>
-                </div>
-                <div
-                    class="flex flex-col items-center gap-2 p-4 bg-surface-container rounded-lg group active:scale-95 transition-transform">
-                    <div
-                        class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
-                        <span class="material-symbols-outlined" data-icon="apparel">apparel</span>
+                    <div class="flex flex-col items-center gap-2 p-4 bg-surface-container rounded-lg">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-secondary shadow-sm">
+                            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">apparel</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[10px] font-extrabold text-on-surface-variant uppercase">Roupas</span>
+                            <span class="text-[9px] font-medium text-secondary/70">Tamanho: 2+ Anos</span>
+                        </div>
                     </div>
-                    <span class="text-[10px] font-bold text-on-surface-variant uppercase text-center">Roupas</span>
                 </div>
-                <div
-                    class="flex flex-col items-center gap-2 p-4 bg-surface-container rounded-lg group active:scale-95 transition-transform">
-                    <div
-                        class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-tertiary shadow-sm">
-                        <span class="material-symbols-outlined" data-icon="redeem">redeem</span>
+
+                <!-- Separador -->
+                <div class="flex items-center gap-4 px-4">
+                    <div class="h-px bg-outline-variant flex-grow opacity-20"></div>
+                    <span class="text-[10px] font-bold text-on-surface-variant opacity-40 tracking-[0.2em] uppercase">ou</span>
+                    <div class="h-px bg-outline-variant flex-grow opacity-20"></div>
+                </div>
+
+                <!-- Amazon Link -->
+                <a href="https://www.amazon.com.br/hz/wishlist/dl/invite/AQICAHild4Vpadjqcz7bdgUf6Qu6-OaRt7P_FJRNNbyMlg-OQwE8FV1Um3ITdh5qHqNDFTlsAAAAkTCBjgYJKoZIhvcNAQcGoIGAMH4CAQAweQYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzYvpKQF0BZ3n3Zl-QCARCATPfOET0g2_1otd8kIX6PRK6k6-TYfJU_UVcdPk0HcWhefUVi-P9Mu6dWhRbol6nn5Ga5plSwwF1-YOJhrXi-FoQ5wWZEtTSR3khUdPw?ref_=wl_share" 
+                   target="_blank"
+                   class="flex items-center justify-between p-5 bg-white border-2 border-[#FF9900]/20 rounded-2xl hover:bg-[#FF9900]/5 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-[#FF9900]/10 rounded-xl flex items-center justify-center text-[#FF9900]">
+                            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.17 14.4c0-2.22-1.74-2.8-4.13-3.23l-3.25-.56v-2.1c.14-.04.28-.08.43-.08 1.44 0 2.27.75 2.27 1.9h1.92c-.08-2.26-1.61-3.66-4.2-3.66-1.57 0-2.45.62-2.92 1.34l.03-1.14H6.5v11.96h1.93v-.9c.5.65 1.35 1.05 2.72 1.05 2.62 0 4.14-1.35 4.14-3.56v-1c0 .01 2.88 0 2.88 0zm-7.38.7c0 1.25-.79 1.83-1.95 1.83-1.07 0-1.94-.49-1.94-1.7V12.1l3.05.52c.6.11.84.28.84 1.12v1.36h.001zM18.83 20H4.5v-1.6h14.33V20z"/>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-on-background">Lista de Desejos</span>
+                            <span class="text-[10px] text-on-surface-variant font-medium">Veja as escolhas do Théo na Amazon</span>
+                        </div>
                     </div>
-                    <span class="text-[10px] font-bold text-on-surface-variant uppercase text-center">Lista</span>
-                </div>
+                    <span class="material-symbols-outlined text-[#FF9900] group-hover:translate-x-1 transition-transform">open_in_new</span>
+                </a>
             </div>
         </section>
     </main>
-    <!-- BottomNavBar -->
-    <nav
-        class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#fff5ec]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0px_-10px_24px_rgba(56,45,30,0.06)] rounded-t-[3rem]">
-        <button
-            class="flex items-center justify-center bg-[#29664c] text-[#fff5ec] rounded-full p-4 shadow-lg scale-96 active:scale-90 transition-transform duration-300">
-            <span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
-        </button>
-        <button
-            class="flex items-center justify-center text-[#735700] p-4 hover:bg-[#b9f9d6]/20 transition-colors scale-96 active:scale-90 transition-transform duration-300">
-            <span class="material-symbols-outlined" data-icon="send">send</span>
-        </button>
-    </nav>
+
+
+        <!-- Audio -->
+        <audio id="bg-music" loop src="assets/audio/music.mp3"></audio>
+
+    </div> <!-- End Shell Container -->
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,12 @@
+# AG kit
+.agent
+.gemini
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# Temporary logs
+*.log
