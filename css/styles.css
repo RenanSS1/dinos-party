@@ -1,5 +1,34 @@
 /* Custom Styles for Dinos Party */
 
+/* ===== iOS PERFORMANCE FIXES ===== */
+
+/* Smooth momentum scrolling on iOS (prevents sluggish scroll) */
+html, body {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Promote carousel container to GPU composite layer */
+.moments-swiper,
+.swiper-wrapper,
+.swiper-slide {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Prevent iOS from reload on overscroll (rubber band effect) */
+body {
+    overscroll-behavior-y: none;
+}
+
+/* Prevent tap highlight delay on interactive elements */
+button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

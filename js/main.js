@@ -228,15 +228,20 @@ document.addEventListener('DOMContentLoaded', () => {
         "VID_20251109_110928.mp4", "VID_20251214_114248-CINEMATIC_MOMENT_VIDEO.mp4", "VID_20260201_151952.mp4"
     ];
 
-    const shuffleMedia = (array) => {
-        return [...array].sort(() => 0.5 - Math.random());
+    const shuffleMedia = (array, count = 40) => {
+        const shuffled = [...array].sort(() => 0.5 - Math.random());
+        return count ? shuffled.slice(0, count) : shuffled;
     };
+
+    // Detect iOS to avoid heavy CSS effects that cause crashes
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     const renderMedia = () => {
         const wrapper = document.getElementById('moments-wrapper');
         if (!wrapper) return;
 
-        const selectedMedia = shuffleMedia(allMedia);
+        // Limit to 40 items on iOS to prevent memory crash, all items on desktop
+        const selectedMedia = shuffleMedia(allMedia, isIOS ? 40 : 0);
 
         selectedMedia.forEach(file => {
             const isVideo = file.toLowerCase().endsWith('.mp4');
@@ -244,29 +249,46 @@ document.addEventListener('DOMContentLoaded', () => {
             slide.className = 'swiper-slide';
 
             if (isVideo) {
-                slide.innerHTML = `
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#29664c]/5 flex items-center justify-center rounded-xl">
-                        <!-- Blurred Background Video -->
-                        <video class="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-30 pointer-events-none select-none" autoplay muted loop playsinline preload="none">
+                // On iOS: single video, no blur background (blur on video causes crash/reload)
+                // On desktop: single video with CSS blur background
+                const bgStyle = isIOS
+                    ? 'background: #1a2e1e;'
+                    : '';
+                const bgBlurEl = isIOS
+                    ? ''
+                    : `<video class="absolute inset-0 w-full h-full object-cover scale-110 opacity-25 pointer-events-none select-none" style="filter: blur(20px); transform: translateZ(0) scale(1.1);" muted loop playsinline preload="none" aria-hidden="true">
                             <source src="assets/img/moments/${file}" type="video/mp4">
-                        </video>
+                        </video>`;
+
+                slide.innerHTML = `
+                    <div class="relative w-full aspect-[4/5] overflow-hidden flex items-center justify-center rounded-xl" style="${bgStyle}">
+                        ${bgBlurEl}
                         <!-- Foreground Video -->
                         <video class="relative z-10 w-full h-full object-contain" autoplay muted loop playsinline
-                               onerror="this.closest('.swiper-slide').remove()" preload="none">
+                               onerror="this.closest('.swiper-slide').remove()" preload="none"
+                               style="transform: translateZ(0);">
                             <source src="assets/img/moments/${file}" type="video/mp4">
                         </video>
                     </div>
                 `;
             } else {
+                // On iOS: use CSS filter only on img (safe), skip scale for perf
+                const blurClass = isIOS
+                    ? 'absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none select-none'
+                    : 'absolute inset-0 w-full h-full object-cover scale-110 opacity-40 pointer-events-none select-none';
+                const blurStyle = isIOS
+                    ? 'filter: blur(14px); transform: translateZ(0);'
+                    : 'filter: blur(24px); transform: translateZ(0) scale(1.1);';
+
                 slide.innerHTML = `
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#29664c]/5 flex items-center justify-center rounded-xl">
+                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#0d1f13] flex items-center justify-center rounded-xl">
                         <!-- Blurred Background Image -->
-                        <img src="assets/img/moments/${file}" class="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-40 pointer-events-none select-none" aria-hidden="true">
+                        <img src="assets/img/moments/${file}" class="${blurClass}" style="${blurStyle}" aria-hidden="true" loading="lazy">
                         <!-- Foreground Image -->
-                        <img src="assets/img/moments/${file}" alt="Momento do Théo" 
+                        <img src="assets/img/moments/${file}" alt="Momento do Théo"
                              class="relative z-10 w-full h-full object-contain" loading="lazy"
+                             style="transform: translateZ(0);"
                              onerror="this.closest('.swiper-slide').remove()">
-                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white z-20"></div>
                     </div>
                 `;
             }
@@ -278,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             autoplay: {
                 delay: 4000,
                 disableOnInteraction: false,
+                pauseOnMouseEnter: true,
             },
             pagination: {
                 el: '.swiper-pagination',
@@ -289,8 +312,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevEl: '.swiper-button-prev',
             },
             spaceBetween: 20,
-            lazyPreloadPrevNext: 3, // Pré-carrega as 3 próximas imagens e as 3 anteriores
-            watchSlidesProgress: true, // Melhora a detecção de quais slides estão visíveis
+            // Preload only 1 slide ahead on iOS to save memory, 3 on desktop
+            lazyPreloadPrevNext: isIOS ? 1 : 3,
+            watchSlidesProgress: true,
+            // Critical: prevent Swiper from creating duplicate DOM nodes beyond what's needed
+            loopAdditionalSlides: isIOS ? 1 : 3,
+            // Use CSS transforms instead of translate for better iOS compositing
+            cssMode: false,
         });
 
         const playPauseBtn = document.getElementById('carousel-play-pause-btn');
