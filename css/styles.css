@@ -7,21 +7,18 @@ html, body {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Promote carousel container to GPU composite layer */
-.moments-swiper,
-.swiper-wrapper,
-.swiper-slide {
+/* Only the Swiper wrapper needs GPU promotion, NOT individual slides */
+.moments-swiper {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    will-change: transform;
+}
+
+/* Individual slides must NOT have will-change - creates 80+ GPU layers and crashes iOS */
+.swiper-slide {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
 
-/* Prevent iOS from reload on overscroll (rubber band effect) */
-body {
-    overscroll-behavior-y: none;
-}
 
 /* Prevent tap highlight delay on interactive elements */
 button, a, [role="button"] {

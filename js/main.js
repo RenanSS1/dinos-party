@@ -240,8 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapper = document.getElementById('moments-wrapper');
         if (!wrapper) return;
 
-        // Limit to 40 items on iOS to prevent memory crash, all items on desktop
-        const selectedMedia = shuffleMedia(allMedia, isIOS ? 40 : 0);
+        // iOS: limit to 20 slides (loop mode OFF = no clones, so 20 is safe)
+        // Desktop: all items shuffled
+        const selectedMedia = shuffleMedia(allMedia, isIOS ? 20 : 0);
 
         selectedMedia.forEach(file => {
             const isVideo = file.toLowerCase().endsWith('.mp4');
@@ -249,54 +250,47 @@ document.addEventListener('DOMContentLoaded', () => {
             slide.className = 'swiper-slide';
 
             if (isVideo) {
-                // On iOS: single video, no blur background (blur on video causes crash/reload)
-                // On desktop: single video with CSS blur background
-                const bgStyle = isIOS
-                    ? 'background: #1a2e1e;'
-                    : '';
+                // On iOS: single video, solid dark background - NO blur (causes GPU crash)
+                // On desktop: blurred video background
                 const bgBlurEl = isIOS
                     ? ''
-                    : `<video class="absolute inset-0 w-full h-full object-cover scale-110 opacity-25 pointer-events-none select-none" style="filter: blur(20px); transform: translateZ(0) scale(1.1);" muted loop playsinline preload="none" aria-hidden="true">
+                    : `<video class="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none select-none" style="filter: blur(20px); transform: scale(1.1);" muted loop playsinline preload="none" aria-hidden="true">
                             <source src="assets/img/moments/${file}" type="video/mp4">
                         </video>`;
 
                 slide.innerHTML = `
-                    <div class="relative w-full aspect-[4/5] overflow-hidden flex items-center justify-center rounded-xl" style="${bgStyle}">
+                    <div class="relative w-full aspect-[4/5] overflow-hidden flex items-center justify-center rounded-xl" style="background:#1a2e1e">
                         ${bgBlurEl}
-                        <!-- Foreground Video -->
                         <video class="relative z-10 w-full h-full object-contain" autoplay muted loop playsinline
-                               onerror="this.closest('.swiper-slide').remove()" preload="none"
-                               style="transform: translateZ(0);">
+                               onerror="this.closest('.swiper-slide').remove()" preload="none">
                             <source src="assets/img/moments/${file}" type="video/mp4">
                         </video>
                     </div>
                 `;
             } else {
-                // On iOS: use CSS filter only on img (safe), skip scale for perf
-                const blurClass = isIOS
-                    ? 'absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none select-none'
-                    : 'absolute inset-0 w-full h-full object-cover scale-110 opacity-40 pointer-events-none select-none';
-                const blurStyle = isIOS
-                    ? 'filter: blur(14px); transform: translateZ(0);'
-                    : 'filter: blur(24px); transform: translateZ(0) scale(1.1);';
+                // On iOS: NO blur background image - only foreground image on solid color bg
+                // On desktop: blurred background image
+                const innerHTML = isIOS
+                    ? `<div class="relative w-full aspect-[4/5] overflow-hidden bg-[#0d1f13] flex items-center justify-center rounded-xl">
+                            <img src="assets/img/moments/${file}" alt="Momento do Théo"
+                                 class="w-full h-full object-contain" loading="lazy"
+                                 onerror="this.closest('.swiper-slide').remove()">
+                        </div>`
+                    : `<div class="relative w-full aspect-[4/5] overflow-hidden bg-[#0d1f13] flex items-center justify-center rounded-xl">
+                            <img src="assets/img/moments/${file}" class="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none select-none" style="filter: blur(24px); transform: scale(1.1);" aria-hidden="true" loading="lazy">
+                            <img src="assets/img/moments/${file}" alt="Momento do Théo"
+                                 class="relative z-10 w-full h-full object-contain" loading="lazy"
+                                 onerror="this.closest('.swiper-slide').remove()">
+                        </div>`;
 
-                slide.innerHTML = `
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#0d1f13] flex items-center justify-center rounded-xl">
-                        <!-- Blurred Background Image -->
-                        <img src="assets/img/moments/${file}" class="${blurClass}" style="${blurStyle}" aria-hidden="true" loading="lazy">
-                        <!-- Foreground Image -->
-                        <img src="assets/img/moments/${file}" alt="Momento do Théo"
-                             class="relative z-10 w-full h-full object-contain" loading="lazy"
-                             style="transform: translateZ(0);"
-                             onerror="this.closest('.swiper-slide').remove()">
-                    </div>
-                `;
+                slide.innerHTML = innerHTML;
             }
             wrapper.appendChild(slide);
         });
 
         const swiper = new Swiper('.moments-swiper', {
-            loop: true,
+            // Loop OFF on iOS: loop mode clones ALL slides, doubling DOM memory usage
+            loop: !isIOS,
             autoplay: {
                 delay: 4000,
                 disableOnInteraction: false,
@@ -312,13 +306,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevEl: '.swiper-button-prev',
             },
             spaceBetween: 20,
-            // Preload only 1 slide ahead on iOS to save memory, 3 on desktop
+            // On iOS: preload only 1 ahead - no clones, fewer images in memory
             lazyPreloadPrevNext: isIOS ? 1 : 3,
             watchSlidesProgress: true,
-            // Critical: prevent Swiper from creating duplicate DOM nodes beyond what's needed
-            loopAdditionalSlides: isIOS ? 1 : 3,
-            // Use CSS transforms instead of translate for better iOS compositing
-            cssMode: false,
+            loopAdditionalSlides: isIOS ? 0 : 3,
         });
 
         const playPauseBtn = document.getElementById('carousel-play-pause-btn');
