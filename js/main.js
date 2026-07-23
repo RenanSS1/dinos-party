@@ -2,13 +2,131 @@
  * Main logic for Dinos Party
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Dinos Party initialized! 🦖');
+    console.log('Dinos Party initialized! 🦖')    // --- Mesversários Progression and Detail Display Logic ---
+    const initMesversarios = () => {
+        const barContainer = document.getElementById('mesversarios-bar-container');
+        const progressFill = document.getElementById('mesversarios-progress-fill');
+        const detailCard = document.getElementById('mesversario-detail-card');
+        const detailImg = document.getElementById('mesversario-detail-img');
+        const imgPlaceholder = document.getElementById('mesversario-img-placeholder');
+        const detailTitle = document.getElementById('mesversario-detail-title');
+        const detailText = document.getElementById('mesversario-detail-text');
+
+        if (!barContainer || !progressFill) return;
+
+        const startDate = new Date('2025-09-10');
+        const endDate = new Date('2026-09-10');
+        const today = new Date();
+        const total = endDate - startDate;
+        const elapsed = today - startDate;
+        const percent = Math.min(Math.max(elapsed / total, 0), 1);
+
+        // Preenche a barra de forma contínua
+        progressFill.style.width = `${percent * 100}%`;
+
+        const texts = {
+            1: "Meu primeiro mês de vida! Já sei dar sorrisos involuntários e amo o aconchego do colo.",
+            2: "Dois meses de muito amor! Estou descobrindo minhas mãozinhas e fazendo os primeiros sons.",
+            3: "Três meses! Durmo muito melhor à noite e adoro olhar para brinquedos coloridos.",
+            4: "Quatro meses! Começando a tentar rolar e dando gargalhadas muito gostosas.",
+            5: "Cinco meses! Seguro meus brinquedos com firmeza e reconheço rostos familiares.",
+            6: "Seis meses! Introdução alimentar começou! Minha primeira papinha e já sento com apoio.",
+            7: "Sete meses! Adoro brincar de se esconder e tentar alcançar as coisas ao redor.",
+            8: "Oito meses! Começando a engatinhar e a explorar todos os cantos da casa.",
+            9: "Nove meses! Consigo ficar de pé me apoiando nos móveis e balbucio 'mama' e 'papa'.",
+            10: "Dez meses! Minha curiosidade está no máximo! Adoro bater palminhas e dar tchau.",
+            11: "Onze meses! Quase um ano! Arriscando meus primeiros passos sem apoio.",
+            12: "Um ano de vida! Aqui vamos fazer a nossa foto juntos na minha festinha de 1 aninho!!!"
+        };
+
+        // Limpa o contêiner antes de gerar
+        barContainer.innerHTML = '';
+
+        // Cria os 12 segmentos interativos sobre a barra
+        for (let i = 1; i <= 12; i++) {
+            const segment = document.createElement('button');
+            segment.type = 'button';
+
+            // Todo mês é clicável para visualização das fotos
+            segment.className = "flex-1 h-full flex items-center justify-center cursor-pointer select-none transition-all duration-200 focus:outline-none hover:bg-black/5 dark:hover:bg-white/5";
+
+            // Se o preenchimento passou do meio do segmento, o texto fica com cor de contraste
+            const isFilled = percent >= (i - 0.5) / 12;
+
+            const label = document.createElement('span');
+            label.className = `text-xs font-bold transition-colors duration-300 ${isFilled
+                ? 'text-on-primary dark:text-stone-950 font-extrabold'
+                : 'text-stone-500 dark:text-stone-400'
+                }`;
+            label.textContent = i;
+            segment.appendChild(label);
+
+            // Evento de clique para mostrar os detalhes do mês
+            segment.addEventListener('click', () => {
+                // Remove destaque de outros segmentos e destaca o atual
+                barContainer.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-inset', 'ring-secondary', 'z-20', 'bg-black/10');
+                });
+                segment.classList.add('ring-2', 'ring-inset', 'ring-secondary', 'z-20', 'bg-black/10');
+
+                // Carrega informações no card de detalhes
+                detailTitle.textContent = `${i}º Mês`;
+                detailText.textContent = texts[i] || 'Momento especial do Théo!';
+
+                // Exibe o card de detalhes
+                detailCard.classList.remove('hidden');
+
+                // Carrega a foto com fallback e loading
+                detailImg.classList.add('hidden');
+                imgPlaceholder.classList.remove('hidden');
+                imgPlaceholder.textContent = 'Carregando...';
+
+                const tempImg = new Image();
+                tempImg.src = `assets/img/mesversario/${i}.jpg`;
+
+                tempImg.onload = () => {
+                    detailImg.src = tempImg.src;
+                    detailImg.classList.remove('hidden');
+                    imgPlaceholder.classList.add('hidden');
+                };
+
+                tempImg.onerror = () => {
+                    detailImg.classList.add('hidden');
+                    imgPlaceholder.classList.remove('hidden');
+                    imgPlaceholder.textContent = 'Sem Foto';
+                };
+            });
+
+            barContainer.appendChild(segment);
+        }
+
+        // Seleciona o primeiro mês por padrão ao carregar
+        setTimeout(() => {
+            barContainer.querySelector('button')?.click();
+        }, 100);
+    };
+
+    initMesversarios();
+
+    // --- Dynamic Favicons ---
+    const linkSvg = document.createElement('link');
+    linkSvg.rel = 'icon';
+    linkSvg.href = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦖</text></svg>';
+    document.head.appendChild(linkSvg);
+
+    const linkPng = document.createElement('link');
+    linkPng.rel = 'icon';
+    linkPng.type = 'image/png';
+    linkPng.href = 'assets/img/avatar.png';
+    document.head.appendChild(linkPng);
 
     // --- Audio Control Logic ---
     const audio = document.getElementById('bg-music');
     const musicBtn = document.querySelector('button:has([data-icon="play_circle"]), button:has([data-icon="pause_circle"])');
     const musicIcon = musicBtn ? musicBtn.querySelector('.material-symbols-outlined') : null;
     const musicText = musicBtn ? musicBtn.querySelector('span:not(.material-symbols-outlined)') : null;
+    const volumeOverlay = document.getElementById('volume-overlay');
+    const volumeOverlayBtn = document.getElementById('volume-overlay-btn');
 
     const toggleMusic = () => {
         if (audio.paused) {
@@ -38,21 +156,22 @@ document.addEventListener('DOMContentLoaded', () => {
         musicBtn.addEventListener('click', toggleMusic);
     }
 
-    const attemptAutoplay = () => {
-        audio.play().then(() => {
-            updateMusicUI(true);
-            window.removeEventListener('click', attemptAutoplay);
-            window.removeEventListener('touchstart', attemptAutoplay);
-        }).catch(() => {});
-    };
-
-    attemptAutoplay();
-    window.addEventListener('click', attemptAutoplay, { once: true });
-    window.addEventListener('touchstart', attemptAutoplay, { once: true });
+    if (volumeOverlay && volumeOverlayBtn) {
+        volumeOverlayBtn.addEventListener('click', () => {
+            volumeOverlay.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                volumeOverlay.remove();
+            }, 500);
+            // Inicia o áudio na interação do usuário
+            audio.play().then(() => {
+                updateMusicUI(true);
+            }).catch(err => console.log("Erro ao iniciar áudio:", err));
+        });
+    }
 
 
     // --- Swiper & Media Gallery Logic ---
-    
+
     // Lista completa de arquivos compatíveis (Atualizada)
     const allMedia = [
         "1766173589146.jpg", "1766173589151.jpg", "1766951263764.jpg", "1766951263772.jpg", "1766951263779.jpg",
@@ -109,16 +228,15 @@ document.addEventListener('DOMContentLoaded', () => {
         "VID_20251109_110928.mp4", "VID_20251214_114248-CINEMATIC_MOMENT_VIDEO.mp4", "VID_20260201_151952.mp4"
     ];
 
-    const shuffleMedia = (array, count) => {
-        const shuffled = [...array].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
+    const shuffleMedia = (array) => {
+        return [...array].sort(() => 0.5 - Math.random());
     };
 
     const renderMedia = () => {
         const wrapper = document.getElementById('moments-wrapper');
         if (!wrapper) return;
 
-        const selectedMedia = shuffleMedia(allMedia, 40);
+        const selectedMedia = shuffleMedia(allMedia);
 
         selectedMedia.forEach(file => {
             const isVideo = file.toLowerCase().endsWith('.mp4');
@@ -127,22 +245,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isVideo) {
                 slide.innerHTML = `
-                    <video class="w-full aspect-[4/5] object-cover" autoplay muted loop playsinline
-                           onerror="this.closest('.swiper-slide').remove()">
-                        <source src="assets/img/moments/${file}" type="video/mp4">
-                    </video>
+                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#29664c]/5 flex items-center justify-center rounded-xl">
+                        <!-- Blurred Background Video -->
+                        <video class="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-30 pointer-events-none select-none" autoplay muted loop playsinline preload="none">
+                            <source src="assets/img/moments/${file}" type="video/mp4">
+                        </video>
+                        <!-- Foreground Video -->
+                        <video class="relative z-10 w-full h-full object-contain" autoplay muted loop playsinline
+                               onerror="this.closest('.swiper-slide').remove()" preload="none">
+                            <source src="assets/img/moments/${file}" type="video/mp4">
+                        </video>
+                    </div>
                 `;
             } else {
                 slide.innerHTML = `
-                    <img src="assets/img/moments/${file}" alt="Momento do Théo" 
-                         class="w-full aspect-[4/5] object-cover" loading="lazy"
-                         onerror="this.closest('.swiper-slide').remove()">
+                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#29664c]/5 flex items-center justify-center rounded-xl">
+                        <!-- Blurred Background Image -->
+                        <img src="assets/img/moments/${file}" class="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-40 pointer-events-none select-none" aria-hidden="true">
+                        <!-- Foreground Image -->
+                        <img src="assets/img/moments/${file}" alt="Momento do Théo" 
+                             class="relative z-10 w-full h-full object-contain" loading="lazy"
+                             onerror="this.closest('.swiper-slide').remove()">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white z-20"></div>
+                    </div>
                 `;
             }
             wrapper.appendChild(slide);
         });
 
-        new Swiper('.moments-swiper', {
+        const swiper = new Swiper('.moments-swiper', {
             loop: true,
             autoplay: {
                 delay: 4000,
@@ -158,7 +289,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 prevEl: '.swiper-button-prev',
             },
             spaceBetween: 20,
+            lazyPreloadPrevNext: 3, // Pré-carrega as 3 próximas imagens e as 3 anteriores
+            watchSlidesProgress: true, // Melhora a detecção de quais slides estão visíveis
         });
+
+        const playPauseBtn = document.getElementById('carousel-play-pause-btn');
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => {
+                const icon = playPauseBtn.querySelector('.material-symbols-outlined');
+                if (swiper.autoplay.running) {
+                    swiper.autoplay.stop();
+                    icon.textContent = 'play_arrow';
+                    playPauseBtn.setAttribute('aria-label', 'Iniciar rotação automática');
+                } else {
+                    swiper.autoplay.start();
+                    icon.textContent = 'pause';
+                    playPauseBtn.setAttribute('aria-label', 'Pausar rotação automática');
+                }
+            });
+        }
     };
 
     renderMedia();
@@ -219,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     // Salva no localStorage para evitar reenvio
                     localStorage.setItem('rsvp_confirmed', 'true');
-                    
+
                     // Atualiza a UI imediatamente
                     checkPreviousRSVP();
                 } else {
