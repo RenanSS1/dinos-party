@@ -56,3 +56,21 @@ body {
     border-radius: 4px !important;
     transition: all 0.3s ease;
 }
+
+/* Radio Dino Player helper styles */
+#dino-radio-player {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.play-state-running {
+    animation-play-state: running !important;
+}
+
+.play-state-paused {
+    animation-play-state: paused !important;
+}
+
+/* Bottom padding so main content doesn't hide behind fixed player */
+main {
+    padding-bottom: 96px !important;
+}

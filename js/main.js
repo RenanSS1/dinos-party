@@ -120,52 +120,149 @@ document.addEventListener('DOMContentLoaded', () => {
     linkPng.href = 'assets/img/avatar.png';
     document.head.appendChild(linkPng);
 
-    // --- Audio Control Logic ---
+    // --- Dino Radio Playlist Control Logic ---
     const audio = document.getElementById('bg-music');
-    const musicBtn = document.querySelector('button:has([data-icon="play_circle"]), button:has([data-icon="pause_circle"])');
-    const musicIcon = musicBtn ? musicBtn.querySelector('.material-symbols-outlined') : null;
-    const musicText = musicBtn ? musicBtn.querySelector('span:not(.material-symbols-outlined)') : null;
+    const heroMusicBtn = document.querySelector('button:has([data-icon="play_circle"]), button:has([data-icon="pause_circle"])');
+    const heroMusicIcon = heroMusicBtn ? heroMusicBtn.querySelector('.material-symbols-outlined') : null;
+    const heroMusicText = heroMusicBtn ? heroMusicBtn.querySelector('span:not(.material-symbols-outlined)') : null;
+    
     const volumeOverlay = document.getElementById('volume-overlay');
     const volumeOverlayBtn = document.getElementById('volume-overlay-btn');
 
-    const toggleMusic = () => {
+    // Bottom bar elements
+    const radioPlayBtn = document.getElementById('radio-play-btn');
+    const radioPlayIcon = document.getElementById('radio-play-icon');
+    const radioPrevBtn = document.getElementById('radio-prev-btn');
+    const radioNextBtn = document.getElementById('radio-next-btn');
+    const radioTrackTitle = document.getElementById('radio-track-title');
+    const radioDiskIcon = document.getElementById('radio-disk-icon');
+
+    // Playlist Definition
+    const playlist = [
+        { title: "Tema da Aventura", src: "assets/audio/music.mp3" },
+        { title: "Dino Rádio - Faixa 1", src: "assets/audio/radio/1.mp3" },
+        { title: "Dino Rádio - Faixa 2", src: "assets/audio/radio/2.mp3" },
+        { title: "Dino Rádio - Faixa 3", src: "assets/audio/radio/3.mp3" },
+        { title: "Dino Rádio - Faixa 4", src: "assets/audio/radio/4.mp3" },
+        { title: "Dino Rádio - Faixa 5", src: "assets/audio/radio/5.mp3" }
+    ];
+
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+
+    // Load a track from playlist
+    const loadTrack = (index, shouldPlay = true) => {
+        if (index < 0) index = playlist.length - 1;
+        if (index >= playlist.length) index = 0;
+        
+        currentTrackIndex = index;
+        audio.src = playlist[currentTrackIndex].src;
+        if (radioTrackTitle) {
+            radioTrackTitle.textContent = playlist[currentTrackIndex].title;
+        }
+
+        if (shouldPlay) {
+            playAudio();
+        } else {
+            pauseAudio();
+        }
+    };
+
+    const playAudio = () => {
+        audio.play().then(() => {
+            isPlaying = true;
+            updateRadioUI(true);
+        }).catch(err => {
+            console.log("Erro ao tocar faixa:", err);
+            // Fallback: se a música do rádio falhar (ex: arquivo não baixado), tenta a próxima
+            if (currentTrackIndex !== 0) {
+                console.log("Pulando faixa inexistente...");
+                playNext();
+            }
+        });
+    };
+
+    const pauseAudio = () => {
+        audio.pause();
+        isPlaying = false;
+        updateRadioUI(false);
+    };
+
+    const togglePlay = () => {
         if (audio.paused) {
-            audio.play().then(() => {
-                updateMusicUI(true);
-            }).catch(err => console.log("Erro ao tocar música:", err));
+            playAudio();
         } else {
-            audio.pause();
-            updateMusicUI(false);
+            pauseAudio();
         }
     };
 
-    const updateMusicUI = (isPlaying) => {
-        if (!musicIcon || !musicText) return;
-        if (isPlaying) {
-            musicIcon.textContent = 'pause_circle';
-            musicIcon.style.fontVariationSettings = "'FILL' 1";
-            musicText.textContent = 'Pausar Música';
-        } else {
-            musicIcon.textContent = 'play_circle';
-            musicIcon.style.fontVariationSettings = "'FILL' 1";
-            musicText.textContent = 'Ouvir Música';
+    const playNext = () => {
+        loadTrack(currentTrackIndex + 1, true);
+    };
+
+    const playPrev = () => {
+        loadTrack(currentTrackIndex - 1, true);
+    };
+
+    const updateRadioUI = (playing) => {
+        // Sync Hero Button
+        if (heroMusicIcon && heroMusicText) {
+            if (playing) {
+                heroMusicIcon.textContent = 'pause_circle';
+                heroMusicText.textContent = 'Pausar Música';
+            } else {
+                heroMusicIcon.textContent = 'play_circle';
+                heroMusicText.textContent = 'Ouvir Música';
+            }
+        }
+
+        // Sync Bottom Bar Player
+        if (radioPlayIcon) {
+            radioPlayIcon.textContent = playing ? 'pause' : 'play_arrow';
+        }
+
+        // Spin disk animation
+        if (radioDiskIcon) {
+            if (playing) {
+                radioDiskIcon.classList.remove('play-state-paused');
+                radioDiskIcon.classList.add('play-state-running');
+            } else {
+                radioDiskIcon.classList.remove('play-state-running');
+                radioDiskIcon.classList.add('play-state-paused');
+            }
         }
     };
 
-    if (musicBtn) {
-        musicBtn.addEventListener('click', toggleMusic);
+    // Attach Event Listeners
+    if (heroMusicBtn) {
+        heroMusicBtn.addEventListener('click', togglePlay);
+    }
+    if (radioPlayBtn) {
+        radioPlayBtn.addEventListener('click', togglePlay);
+    }
+    if (radioNextBtn) {
+        radioNextBtn.addEventListener('click', playNext);
+    }
+    if (radioPrevBtn) {
+        radioPrevBtn.addEventListener('click', playPrev);
     }
 
+    // Auto-advance to next song
+    audio.addEventListener('ended', playNext);
+
+    // Initial Load without autoplaying immediately (unless started via overlay)
+    loadTrack(0, false);
+
+    // Volume overlay click action
     if (volumeOverlay && volumeOverlayBtn) {
         volumeOverlayBtn.addEventListener('click', () => {
             volumeOverlay.classList.add('opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 volumeOverlay.remove();
             }, 500);
-            // Inicia o áudio na interação do usuário
-            audio.play().then(() => {
-                updateMusicUI(true);
-            }).catch(err => console.log("Erro ao iniciar áudio:", err));
+            
+            // Inicia a música com interação do usuário
+            playAudio();
         });
     }
 
