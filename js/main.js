@@ -122,9 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dino Radio Playlist Control Logic ---
     const audio = document.getElementById('bg-music');
-    const heroMusicBtn = document.querySelector('button:has([data-icon="play_circle"]), button:has([data-icon="pause_circle"])');
-    const heroMusicIcon = heroMusicBtn ? heroMusicBtn.querySelector('.material-symbols-outlined') : null;
-    const heroMusicText = heroMusicBtn ? heroMusicBtn.querySelector('span:not(.material-symbols-outlined)') : null;
     
     const volumeOverlay = document.getElementById('volume-overlay');
     const volumeOverlayBtn = document.getElementById('volume-overlay-btn');
@@ -205,17 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateRadioUI = (playing) => {
-        // Sync Hero Button
-        if (heroMusicIcon && heroMusicText) {
-            if (playing) {
-                heroMusicIcon.textContent = 'pause_circle';
-                heroMusicText.textContent = 'Pausar Música';
-            } else {
-                heroMusicIcon.textContent = 'play_circle';
-                heroMusicText.textContent = 'Ouvir Música';
-            }
-        }
-
         // Sync Bottom Bar Player
         if (radioPlayIcon) {
             radioPlayIcon.textContent = playing ? 'pause' : 'play_arrow';
@@ -234,9 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Attach Event Listeners
-    if (heroMusicBtn) {
-        heroMusicBtn.addEventListener('click', togglePlay);
-    }
     if (radioPlayBtn) {
         radioPlayBtn.addEventListener('click', togglePlay);
     }
