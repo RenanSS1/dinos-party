@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const initMesversarios = () => {
         const barContainer = document.getElementById('mesversarios-bar-container');
         const progressFill = document.getElementById('mesversarios-progress-fill');
+        const footprint = document.getElementById('mesversario-footprint');
+        const currentLabel = document.getElementById('mesversario-current-label');
         const detailCard = document.getElementById('mesversario-detail-card');
         const detailImg = document.getElementById('mesversario-detail-img');
         const imgPlaceholder = document.getElementById('mesversario-img-placeholder');
@@ -36,38 +38,45 @@ document.addEventListener('DOMContentLoaded', () => {
             9: "Nove meses! Consigo ficar de pé me apoiando nos móveis e balbucio 'mama' e 'papa'.",
             10: "Dez meses! Minha curiosidade está no máximo! Adoro bater palminhas e dar tchau.",
             11: "Onze meses! Quase um ano! Arriscando meus primeiros passos sem apoio.",
-            12: "Um ano de vida! Aqui vamos fazer a nossa foto juntos na minha festinha de 1 aninho!!!"
+            12: "Um ano de vida! Aqui vamos fazer a nossa foto juntos em minha festinha de 1 ano!!!"
         };
 
         // Limpa o contêiner antes de gerar
         barContainer.innerHTML = '';
 
-        // Cria os 12 segmentos interativos sobre a barra
+        // Cria os 12 dots interativos com tracks entre eles
         for (let i = 1; i <= 12; i++) {
-            const segment = document.createElement('button');
-            segment.type = 'button';
+            // Determina o estado do dot
+            const isPast = percent > i / 12;
+            const isCurrent = percent >= (i - 1) / 12 && percent < i / 12;
+            const isActive = percent >= (i - 0.5) / 12;
 
-            // Todo mês é clicável para visualização das fotos
-            segment.className = "flex-1 h-full flex items-center justify-center cursor-pointer select-none transition-all duration-200 focus:outline-none hover:bg-black/5 dark:hover:bg-white/5";
-
-            // Se o preenchimento passou do meio do segmento, o texto fica com cor de contraste
-            const isFilled = percent >= (i - 0.5) / 12;
+            // Cria o dot (círculo clicável)
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'mesversario-dot';
+            if (isPast) dot.classList.add('past');
+            if (isCurrent) dot.classList.add('active');
+            if (!isPast && !isCurrent) dot.classList.add('future');
+            dot.dataset.month = i;
 
             const label = document.createElement('span');
-            label.className = `text-xs font-bold transition-colors duration-300 ${isFilled
-                ? 'text-on-primary dark:text-stone-950 font-extrabold'
-                : 'text-stone-500 dark:text-stone-400'
-                }`;
+            label.className = 'dot-label';
             label.textContent = i;
-            segment.appendChild(label);
+            dot.appendChild(label);
 
             // Evento de clique para mostrar os detalhes do mês
-            segment.addEventListener('click', () => {
-                // Remove destaque de outros segmentos e destaca o atual
-                barContainer.querySelectorAll('button').forEach(btn => {
-                    btn.classList.remove('ring-2', 'ring-inset', 'ring-secondary', 'z-20', 'bg-black/10');
+            dot.addEventListener('click', () => {
+                // Remove destaque de outros dots
+                barContainer.querySelectorAll('.mesversario-dot').forEach(d => {
+                    d.classList.remove('active');
                 });
-                segment.classList.add('ring-2', 'ring-inset', 'ring-secondary', 'z-20', 'bg-black/10');
+                dot.classList.add('active');
+
+                // Atualiza label indicador
+                if (currentLabel) {
+                    currentLabel.textContent = `Mês ${i} de 12`;
+                }
 
                 // Carrega informações no card de detalhes
                 detailTitle.textContent = `${i}º Mês`;
@@ -97,13 +106,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
 
-            barContainer.appendChild(segment);
+            barContainer.appendChild(dot);
+
+            // Adiciona track (conector) entre dots, exceto após o último
+            if (i < 12) {
+                const track = document.createElement('div');
+                track.className = 'mesversario-track';
+                if (percent > i / 12) {
+                    track.classList.add('filled');
+                }
+                barContainer.appendChild(track);
+            }
+        }
+
+        // Posiciona a pegada decorativa na barra
+        const updateFootprint = () => {
+            if (!footprint || !barContainer) return;
+            const barWidth = barContainer.offsetWidth;
+            const pos = percent * barWidth;
+            const maxPos = barWidth - 20;
+            footprint.style.left = `${Math.min(pos, maxPos)}px`;
+        };
+
+        // Atualiza label inicial
+        if (currentLabel) {
+            const currentMonth = Math.ceil(percent * 12) || 1;
+            currentLabel.textContent = `Mês ${currentMonth} de 12`;
         }
 
         // Seleciona o primeiro mês por padrão ao carregar
         setTimeout(() => {
-            barContainer.querySelector('button')?.click();
-        }, 100);
+            const targetDot = barContainer.querySelector('.mesversario-dot[data-month="1"]');
+            if (targetDot) {
+                targetDot.click();
+            } else {
+                barContainer.querySelector('.mesversario-dot')?.click();
+            }
+            updateFootprint();
+        }, 200);
+
+        // Recalcula posição da pegada em resize (com debounce)
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateFootprint, 100);
+        });
     };
 
     initMesversarios();
@@ -239,11 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Volume overlay click action
     if (volumeOverlay && volumeOverlayBtn) {
         volumeOverlayBtn.addEventListener('click', () => {
-            volumeOverlay.classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                volumeOverlay.remove();
-            }, 500);
-            
+            volumeOverlay.classList.add('opacity-0', 'pointer-events-none', 'hidden');
             // Inicia a música com interação do usuário
             playAudio();
         });
@@ -310,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const shuffleMedia = (array, count = 40) => {
         const shuffled = [...array].sort(() => 0.5 - Math.random());
-        return count ? shuffled.slice(0, count) : shuffled;
+        return shuffled.slice(0, count);
     };
 
     // Detect iOS to avoid heavy CSS effects that cause crashes
@@ -320,9 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapper = document.getElementById('moments-wrapper');
         if (!wrapper) return;
 
-        // iOS: limit to 20 slides (loop mode OFF = no clones, so 20 is safe)
-        // Desktop: all items shuffled
-        const selectedMedia = shuffleMedia(allMedia, isIOS ? 20 : 0);
+        // iOS: limit to 20 slides; Desktop: limit to 40 to reduce DOM pressure
+        const selectedMedia = shuffleMedia(allMedia, isIOS ? 20 : 40);
 
         selectedMedia.forEach(file => {
             const isVideo = file.toLowerCase().endsWith('.mp4');
@@ -436,13 +478,71 @@ document.addEventListener('DOMContentLoaded', () => {
         // Verifica ao carregar
         checkPreviousRSVP();
 
+        // --- Validação do campo Nome ---
+        const nameInput = document.getElementById('name');
+        let nameErrorEl = null;
+
+        const createNameError = () => {
+            if (nameErrorEl) return;
+            nameErrorEl = document.createElement('span');
+            nameErrorEl.id = 'name-error';
+            nameErrorEl.className = 'text-xs font-bold text-error mt-1 ml-1 block';
+            nameErrorEl.style.display = 'none';
+            nameInput.parentNode.appendChild(nameErrorEl);
+        };
+
+        const showNameError = (message) => {
+            createNameError();
+            nameErrorEl.textContent = message;
+            nameErrorEl.style.display = 'block';
+            nameInput.classList.add('ring-2', 'ring-error');
+        };
+
+        const clearNameError = () => {
+            if (nameErrorEl) {
+                nameErrorEl.style.display = 'none';
+                nameErrorEl.textContent = '';
+            }
+            nameInput.classList.remove('ring-2', 'ring-error');
+        };
+
+        const validateName = (name) => {
+            const trimmed = name.trim();
+            if (!trimmed) {
+                return 'O nome é obrigatório';
+            }
+            if (trimmed.length < 3) {
+                return 'O nome deve ter pelo menos 3 caracteres';
+            }
+            if (trimmed.length > 100) {
+                return 'O nome está muito longo';
+            }
+            if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(trimmed)) {
+                return 'O nome deve conter apenas letras';
+            }
+            return null;
+        };
+
+        // Limpa erro ao digitar
+        nameInput.addEventListener('input', clearNameError);
+
         rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Coleta de dados
+            // Validação do nome
+            clearNameError();
+            const rawName = document.getElementById('name').value;
+            const nameError = validateName(rawName);
+
+            if (nameError) {
+                showNameError(nameError);
+                return;
+            }
+
+            // Coleta de dados (nome sanitizado)
             const formData = {
                 data: [{
-                    nome: document.getElementById('name').value,
+                    nome: rawName.trim(),
                     pessoas: document.getElementById('guests').value,
                     observacao: document.getElementById('obs').value,
                     data_confirmacao: new Date().toLocaleString('pt-BR')
