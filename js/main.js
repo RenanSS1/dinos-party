@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempImg.onerror = () => {
                     detailImg.classList.add('hidden');
                     imgPlaceholder.classList.remove('hidden');
-                    imgPlaceholder.textContent = 'Sem Foto';
+                    imgPlaceholder.textContent = 'EM BREVE';
                 };
             });
 
@@ -452,6 +452,62 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     renderMedia();
+
+    // --- Smart Calendar Link Logic ---
+    const calendarLink = document.getElementById('calendar-link');
+
+    if (calendarLink) {
+        calendarLink.addEventListener('click', (e) => {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+
+            if (isIOS) {
+                // iOS: gerar e baixar arquivo .ics para abrir no app Calendário nativo
+                e.preventDefault();
+
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'PRODID:-//DinosParty//PT',
+                    'BEGIN:VEVENT',
+                    'DTSTART:20260912T190000Z',
+                    'DTEND:20260912T230000Z',
+                    'SUMMARY:1º Rugido do Théo 🦖',
+                    'DESCRIPTION:Convite para comemorar o primeiro aninho do Théo!',
+                    'LOCATION:Cerimonial Mariani - R. Frederico Ozanan, 891 - Santa Tereza, Vitória - ES',
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n');
+
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = '1-rugido-do-theo.ics';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(url);
+            } else if (isAndroid) {
+                // Android: usar intent:// para abrir no app Google Agenda
+                e.preventDefault();
+                const webUrl = calendarLink.href;
+                const intentUrl = 'intent://calendar/u/0/r/eventedit' +
+                    '?text=1%C2%BA+Rugido+do+Th%C3%A9o+%F0%9F%A6%96' +
+                    '&dates=20260912T190000Z/20260912T230000Z' +
+                    '&details=Convite+para+comemorar+o+primeiro+aninho+do+Th%C3%A9o!' +
+                    '&location=Cerimonial+Mariani+-+R.+Frederico+Ozanan,+891+-+Santa+Tereza,+Vit%C3%B3ria+-+ES' +
+                    '#Intent;scheme=https;package=com.google.android.calendar;end';
+                window.location.href = intentUrl;
+
+                // Fallback se o app não estiver instalado
+                setTimeout(() => {
+                    window.location.href = webUrl;
+                }, 500);
+            }
+            // Desktop: mantém o comportamento padrão (abre o link do Google Calendar)
+        });
+    }
 
     // --- RSVP Form Logic (SheetDB Integration) ---
     const rsvpForm = document.querySelector('form');
