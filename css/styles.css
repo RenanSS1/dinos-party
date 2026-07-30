@@ -317,3 +317,18 @@ main {
     border-radius: 50%;
     font-size: 14px;
 }
+
+/* ===== DRESS CODE ALERT MODAL ===== */
+#dress-code-modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dress-code-modal-content {
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#dress-code-modal.show .dress-code-modal-content {
+    transform: scale(1);
+}

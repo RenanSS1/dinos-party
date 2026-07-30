@@ -410,6 +410,30 @@
     <!-- Audio Player (Sem o loop para que mude de faixa automaticamente) -->
     <audio id="bg-music" src="assets/audio/music.mp3"></audio>
 
+    <!-- Dress Code Alert Modal -->
+    <div id="dress-code-modal" class="fixed inset-0 z-[90] flex items-center justify-center p-6 bg-stone-950/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="dress-code-modal-content bg-surface-container-highest rounded-2xl shadow-2xl max-w-sm w-full p-6">
+            <div class="flex flex-col items-center text-center gap-4">
+                <div class="w-16 h-16 bg-primary/15 rounded-full flex items-center justify-center text-3xl">
+                    🦖
+                </div>
+                <h4 class="text-lg font-extrabold font-headline text-on-background">Atenção, recado da família Dino!</h4>
+                <p class="text-sm text-on-surface-variant leading-relaxed">
+                    <span class="material-symbols-outlined align-middle !text-lg !text-primary mr-1" style="font-variation-settings: 'FILL' 1;">checkroom</span>
+                    Os papais do Théo estarão de <strong class="font-extrabold" style="color: #29664c;">verde</strong>. Para deixá-los em destaque nas fotos, pedimos, com muito carinho, que os convidados escolham outra cor de roupa.
+                </p>
+                <div class="flex flex-col gap-3 w-full mt-2">
+                    <button id="dress-code-confirm-btn" class="w-full py-4 bg-primary text-on-primary rounded-full font-bold shadow-md active:scale-95 transition-transform">
+                        Entendi, confirmar presença
+                    </button>
+                    <button id="dress-code-cancel-btn" class="w-full py-3 text-on-surface-variant font-bold text-sm hover:bg-black/5 rounded-full transition-colors">
+                        Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div> <!-- End Shell Container -->
 
     <!-- Page Visibility: pause animations when tab is hidden -->

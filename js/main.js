@@ -495,7 +495,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- RSVP Form Logic (SheetDB Integration) ---
     const rsvpForm = document.querySelector('form');
     const rsvpBtn = rsvpForm ? rsvpForm.querySelector('button[type="submit"]') : null;
-    const rsvpContainer = document.querySelector('#rsvp-section-container'); // Precisaremos adicionar este ID no HTML
+
+    // Dress Code Alert Modal elements
+    const dressCodeModal = document.getElementById('dress-code-modal');
+    const dressCodeConfirmBtn = document.getElementById('dress-code-confirm-btn');
+    const dressCodeCancelBtn = document.getElementById('dress-code-cancel-btn');
 
     // Função para verificar se já confirmou
     const checkPreviousRSVP = () => {
@@ -510,6 +514,58 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
             }
+        }
+    };
+
+    // Função para enviar RSVP para SheetDB
+    const submitRSVP = async () => {
+        const formData = {
+            data: [{
+                nome: document.getElementById('name').value.trim(),
+                pessoas: document.getElementById('guests').value,
+                observacao: document.getElementById('obs').value,
+                data_confirmacao: new Date().toLocaleString('pt-BR')
+            }]
+        };
+
+        const originalText = rsvpBtn.textContent;
+        rsvpBtn.disabled = true;
+        rsvpBtn.textContent = 'Enviando...';
+
+        try {
+            const response = await fetch('https://sheetdb.io/api/v1/rqlpnoz2spupo', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                localStorage.setItem('rsvp_confirmed', 'true');
+                checkPreviousRSVP();
+            } else {
+                throw new Error('Erro na resposta do servidor');
+            }
+        } catch (error) {
+            console.error('Erro ao enviar RSVP:', error);
+            alert('Ops! Tivemos um pequeno problema jurássico ao salvar sua presença. Por favor, tente novamente.');
+            rsvpBtn.disabled = false;
+            rsvpBtn.textContent = originalText;
+        }
+    };
+
+    // Funções para mostrar/esconder modal
+    const showDressCodeModal = () => {
+        if (dressCodeModal) {
+            dressCodeModal.classList.add('show');
+        }
+    };
+
+    const hideDressCodeModal = () => {
+        if (dressCodeModal) {
+            dressCodeModal.classList.remove('show');
         }
     };
 
@@ -565,7 +621,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Limpa erro ao digitar
         nameInput.addEventListener('input', clearNameError);
 
-        rsvpForm.addEventListener('submit', async (e) => {
+        // Dress Code Modal - Confirmar
+        if (dressCodeConfirmBtn) {
+            dressCodeConfirmBtn.addEventListener('click', () => {
+                sessionStorage.setItem('dress_code_acknowledged', 'true');
+                hideDressCodeModal();
+                submitRSVP();
+            });
+        }
+
+        // Dress Code Modal - Voltar
+        if (dressCodeCancelBtn) {
+            dressCodeCancelBtn.addEventListener('click', hideDressCodeModal);
+        }
+
+        rsvpForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             // Validação do nome
@@ -578,45 +648,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Coleta de dados (nome sanitizado)
-            const formData = {
-                data: [{
-                    nome: rawName.trim(),
-                    pessoas: document.getElementById('guests').value,
-                    observacao: document.getElementById('obs').value,
-                    data_confirmacao: new Date().toLocaleString('pt-BR')
-                }]
-            };
-
-            // Estado de carregamento
-            const originalText = rsvpBtn.textContent;
-            rsvpBtn.disabled = true;
-            rsvpBtn.textContent = 'Enviando...';
-
-            try {
-                const response = await fetch('https://sheetdb.io/api/v1/rqlpnoz2spupo', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    // Salva no localStorage para evitar reenvio
-                    localStorage.setItem('rsvp_confirmed', 'true');
-
-                    // Atualiza a UI imediatamente
-                    checkPreviousRSVP();
-                } else {
-                    throw new Error('Erro na resposta do servidor');
-                }
-            } catch (error) {
-                console.error('Erro ao enviar RSVP:', error);
-                alert('Ops! Tivemos um pequeno problema jurássico ao salvar sua presença. Por favor, tente novamente.');
-                rsvpBtn.disabled = false;
-                rsvpBtn.textContent = originalText;
+            // Se já confirmou dress code nesta sessão, envia direto
+            if (sessionStorage.getItem('dress_code_acknowledged') === 'true') {
+                submitRSVP();
+            } else {
+                // Mostra o modal de dress code
+                showDressCodeModal();
             }
         });
     }
